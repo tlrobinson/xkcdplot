@@ -3,18 +3,20 @@ var d3 = require("d3");
 module.exports = function xkcdplot() {
 
     // Default parameters.
-    var width = 600,
-        height = 300,
-        margin = 20,
-        arrowSize = 12,
-        arrowAspect = 0.4,
-        arrowOffset = 6,
-        magnitude = 0.003,
-        xlabel = "Time of Day",
-        ylabel = "Awesomeness",
-        title = "The most important graph ever made",
-        xlim,
-        ylim;
+    var config = {
+        width: 600,
+        height: 300,
+        margin: 20,
+        arrowSize: 12,
+        arrowAspect: 0.4,
+        arrowOffset: 6,
+        magnitude: 0.003,
+        xlabel: "Time of Day",
+        ylabel: "Awesomeness",
+        title: "The most important graph ever made",
+        xlim: null,
+        ylim: null
+    };
 
     // Plot elements.
     var el,
@@ -27,26 +29,33 @@ module.exports = function xkcdplot() {
     // The XKCD object itself.
     var xkcd = function (nm) {
         el = d3.select(nm).append("svg")
-                    .attr("width", width + 2 * margin)
-                    .attr("height", height + 2 * margin)
+                    .attr("width", config.width + 2 * config.margin)
+                    .attr("height", config.height + 2 * config.margin)
                 .append("g")
-                    .attr("transform", "translate(" + margin + ", "
-                                                    + margin + ")");
+                    .attr("transform", "translate(" + config.margin + ", "
+                                                    + config.margin + ")");
         return xkcd;
     };
 
     // Getters and setters.
-    xkcd.xlim = function () {
-        if (!arguments.length) return xlim;
-        xlim = arguments[0];
-        return xkcd;
-    };
+    function makeGetterSetter(name) {
+        xkcd[name] = function (value) {
+            if (arguments.length === 0) {
+                return config[name];
+            }
+            config[name] = value;
+            return xkcd;
+        };
+    }
+    for (var name in config) {
+        makeGetterSetter(name);
+    }
 
     // Do the render.
     xkcd.draw = function () {
         // Set the axes limits.
-        xscale.domain(xlim).range([0, width]);
-        yscale.domain(ylim).range([height, 0]);
+        xscale.domain(config.xlim).range([0, config.width]);
+        yscale.domain(config.ylim).range([config.height, 0]);
 
         // Compute the zero points where the axes will be drawn.
         var x0 = xscale(0),
@@ -57,18 +66,18 @@ module.exports = function xkcdplot() {
         el.selectAll(".axis").remove();
         el.append("svg:path")
             .attr("class", "x axis")
-            .attr("d", axis([[0, y0], [width, y0]]));
+            .attr("d", axis([[0, y0], [config.width, y0]]));
         el.append("svg:path")
             .attr("class", "y axis")
-            .attr("d", axis([[x0, 0], [x0, height]]));
+            .attr("d", axis([[x0, 0], [x0, config.height]]));
 
         // Laboriously draw some arrows at the ends of the axes.
-        var aa = arrowAspect * arrowSize,
-            o = arrowOffset,
-            s = arrowSize;
+        var aa = config.arrowAspect * config.arrowSize,
+            o = config.arrowOffset,
+            s = config.arrowSize;
         el.append("svg:path")
             .attr("class", "x axis arrow")
-            .attr("d", axis([[width - s + o, y0 + aa], [width + o, y0], [width - s + o, y0 - aa]]));
+            .attr("d", axis([[config.width - s + o, y0 + aa], [config.width + o, y0], [config.width - s + o, y0 - aa]]));
         el.append("svg:path")
             .attr("class", "x axis arrow")
             .attr("d", axis([[s - o, y0 + aa], [-o, y0], [s - o, y0 - aa]]));
@@ -77,7 +86,7 @@ module.exports = function xkcdplot() {
             .attr("d", axis([[x0 + aa, s - o], [x0, -o], [x0 - aa, s - o]]));
         el.append("svg:path")
             .attr("class", "y axis arrow")
-            .attr("d", axis([[x0 + aa, height - s + o], [x0, height + o], [x0 - aa, height - s + o]]));
+            .attr("d", axis([[x0 + aa, config.height - s + o], [x0, config.height + o], [x0 - aa, config.height - s + o]]));
 
         for (var i = 0, l = elements.length; i < l; ++i) {
             var e = elements[i];
@@ -87,24 +96,24 @@ module.exports = function xkcdplot() {
         // Add some axes labels.
         el.append("text").attr("class", "x label")
                               .attr("text-anchor", "end")
-                              .attr("x", width - s)
+                              .attr("x", config.width - s)
                               .attr("y", y0 + aa)
                               .attr("dy", ".75em")
-                              .text(xlabel);
+                              .text(config.xlabel);
         el.append("text").attr("class", "y label")
                               .attr("text-anchor", "end")
                               .attr("x", aa)
                               .attr("y", x0)
                               .attr("dy", "-.75em")
                               .attr("transform", "rotate(-90)")
-                              .text(ylabel);
+                              .text(config.ylabel);
 
         // And a title.
         el.append("text").attr("class", "title")
                               .attr("text-anchor", "end")
-                              .attr("x", width)
+                              .attr("x", config.width)
                               .attr("y", 0)
-                              .text(title);
+                              .text(config.title);
 
         return xkcd;
     };
@@ -119,12 +128,12 @@ module.exports = function xkcdplot() {
             yl = d3.extent(data, y);
 
         // Rescale the axes.
-        xlim = xlim || xl;
-        xlim[0] = Math.min(xlim[0], xl[0]);
-        xlim[1] = Math.max(xlim[1], xl[1]);
-        ylim = ylim || yl;
-        ylim[0] = Math.min(ylim[0], yl[0]);
-        ylim[1] = Math.max(ylim[1], yl[1]);
+        config.xlim = config.xlim || xl;
+        config.xlim[0] = Math.min(config.xlim[0], xl[0]);
+        config.xlim[1] = Math.max(config.xlim[1], xl[1]);
+        config.ylim = config.ylim || yl;
+        config.ylim[0] = Math.min(config.ylim[0], yl[0]);
+        config.ylim[1] = Math.max(config.ylim[1], yl[1]);
 
         // Add the plotting function.
         elements.push({
@@ -159,10 +168,10 @@ module.exports = function xkcdplot() {
     //    jakevdp.github.com/blog/2012/10/07/xkcd-style-plots-in-matplotlib
     function xinterp (points) {
         // Scale the data.
-        var f = [xscale(xlim[1]) - xscale(xlim[0]),
-                 yscale(ylim[1]) - yscale(ylim[0])],
-            z = [xscale(xlim[0]),
-                 yscale(ylim[0])],
+        var f = [xscale(config.xlim[1]) - xscale(config.xlim[0]),
+                 yscale(config.ylim[1]) - yscale(config.ylim[0])],
+            z = [xscale(config.xlim[0]),
+                 yscale(config.ylim[0])],
             scaled = points.map(function (p) {
                 return [(p[0] - z[0]) / f[0], (p[1] - z[1]) / f[1]];
             });
@@ -212,8 +221,8 @@ module.exports = function xkcdplot() {
         var result = resampled.map(function (d, i) {
             var p = perturbations[i],
                 g = gradients[i];
-            return [(d[0] + magnitude * g[1] * p) * f[0] + z[0],
-                    (d[1] - magnitude * g[0] * p) * f[1] + z[1]];
+            return [(d[0] + config.magnitude * g[1] * p) * f[0] + z[0],
+                    (d[1] - config.magnitude * g[0] * p) * f[1] + z[1]];
         });
 
         return result.join("L");
