@@ -1,6 +1,6 @@
 {
   "name": "xkcdplot",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "XKCD-style plots in Javascript using D3",
   "main": "xkcd.js",
   "scripts": {
