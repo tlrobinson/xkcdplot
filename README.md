@@ -10,3 +10,19 @@ You should really check out [the source](http://bl.ocks.org/3914862).
 Here's an example...
 
 ![example XKCD chart](https://cloud.githubusercontent.com/assets/18193/13509386/05b58e26-e140-11e5-9d89-e347ca368058.png)
+
+Humor Sans
+----------
+
+If you're using webpack you can load the "Humor Sans" font by simply importing it:
+
+    import "xkcdplot/humor-sans";
+
+Or without ES2015 modules:
+
+    require("xkcdplot/humor-sans");
+
+You need to configure the following loaders (or similar):
+
+    { test: /\.css$/, loader: "style-loader!css-loader" },
+    { test: /\.(eot|woff2?|ttf|svg)$/, loader: "file-loader" }
