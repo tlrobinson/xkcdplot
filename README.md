@@ -11,6 +11,52 @@ Here's an example...
 
 ![example XKCD chart](https://cloud.githubusercontent.com/assets/18193/13509386/05b58e26-e140-11e5-9d89-e347ca368058.png)
 
+
+Usage
+-----
+
+Install the package:
+
+    npm install --save xkcdplot
+
+Import xkcd plot:
+
+    import xkcdplot from "xkcdplot";
+
+Create the plot:
+
+    var plot = xkcdplot();
+
+Configure it:
+
+    plot
+      .width(800)
+      .height(600);
+
+Generate at least one series of data of the form `[{ x: ..., y: ... }, ...]`:
+
+    let data = [
+      { x: 1, y: 2 },
+      { x: 2, y: 3 }
+    ];
+
+    let data2 = [
+      { x: 1, y: 3 },
+      { x: 2, y: 2 }
+    ];
+
+Add them to the plot:
+
+    plot.plot(data);
+    plot.plot(data2, { stroke: "red" });
+
+Set any final settings, then draw it:
+
+    plot("body")
+      .xlim([-1.5, 7.5])
+      .draw();
+
+
 Humor Sans
 ----------
 
