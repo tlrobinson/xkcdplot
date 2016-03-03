@@ -1,0 +1,11 @@
+@font-face {
+    font-family: 'Humor Sans';
+    src: url('humor-sans-1.0-webfont.eot');
+    src: url('humor-sans-1.0-webfont.eot?#iefix') format('embedded-opentype'),
+         url('humor-sans-1.0-webfont.woff2') format('woff2'),
+         url('humor-sans-1.0-webfont.woff') format('woff'),
+         url('humor-sans-1.0-webfont.ttf') format('truetype'),
+         url('humor-sans-1.0-webfont.svg#humor_sansregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}

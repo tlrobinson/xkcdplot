@@ -1,0 +1,26 @@
+{
+  "name": "xkcdplot",
+  "version": "1.0.0",
+  "description": "XKCD-style plots in Javascript using D3",
+  "main": "xkcd.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/.bin/webpack --entry ./example/index --output-filename example/index.dist.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tlrobinson/xkcdplot.git"
+  },
+  "author": "Dan Foreman-Mackey",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tlrobinson/xkcdplot/issues"
+  },
+  "homepage": "https://github.com/tlrobinson/xkcdplot#readme",
+  "dependencies": {
+    "d3": "^3.5.x"
+  },
+  "devDependencies": {
+    "webpack": "^1.12.14"
+  }
+}

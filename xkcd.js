@@ -1,4 +1,6 @@
-function xkcdplot() {
+var d3 = require("d3");
+
+module.exports = function xkcdplot() {
 
     // Default parameters.
     var width = 600,
